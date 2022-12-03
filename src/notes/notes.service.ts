@@ -61,8 +61,9 @@ export class NotesService {
         this.notes = this.notes.filter(notes => notes.id !== result.id);
     }
 
-    updateNote(id: string, description: string): Notes{
+    updateNote(id: string, title: string, description: string): Notes{
         const note = this.getNote(id);
+        note.title = title;
         note.description = description;
         return note;
     }

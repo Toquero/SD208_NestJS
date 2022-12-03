@@ -29,7 +29,7 @@ export class NotesController {
     }
 
     @Patch(':id')
-    updateNote(@Param('id') id:string, @Body('description') description: string): Notes{
-       return this.noteService.updateNote(id, description);
+    updateNote(@Param('id') id:string, @Body('title') title: string, @Body('description') description: string): Notes{
+       return this.noteService.updateNote(id, title, description);
     }
 }
