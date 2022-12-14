@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { title } from 'process';
 import { CreateNotesInfo } from './infos/create.notes.info';
-import { Notes } from './notes.model';
+import { Notes, NotesStatus } from './notes.model';
 import {v4 as uuidv4} from 'uuid';
+import { GetNotesFilterInfos } from './infos/get.notes-filter.infos';
 
 @Injectable()
 export class NotesService {
@@ -30,8 +31,18 @@ export class NotesService {
 
     ];
     
-    getNotes(): Notes[] {
-        return this.notes;
+    getNotes(filterInfos: GetNotesFilterInfos): Notes[] {
+        const {status, search} = filterInfos;
+        let notes = this.notes;
+
+        if(status){
+            notes = notes.filter(x => x.status === status);
+        }
+
+        if(search){
+            notes = notes.filter(x => x.title.includes(search) || x.description.includes(search));
+        }
+        return notes;
     }
 
     getNote(id: string): Notes{
@@ -49,7 +60,8 @@ export class NotesService {
         const newNote:Notes ={
             id: uuidv4(),
             title,
-            description
+            description,
+            status: NotesStatus.OPEN
         }
 
         this.notes.push(newNote);
@@ -61,10 +73,10 @@ export class NotesService {
         this.notes = this.notes.filter(notes => notes.id !== result.id);
     }
 
-    updateNote(id: string, title: string, description: string): Notes{
+    updateNote(id: string, title: string, status: NotesStatus): Notes{
         const note = this.getNote(id);
         note.title = title;
-        note.description = description;
+        note.status = status;
         return note;
     }
 }

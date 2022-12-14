@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { NotesStatusValidationPipe } from 'src/pipes/notes-status-validation-pipe';
 import { CreateNotesInfo } from './infos/create.notes.info';
-import { Notes } from './notes.model';
+import { GetNotesFilterInfos } from './infos/get.notes-filter.infos';
+import { Notes, NotesStatus } from './notes.model';
 import { NotesService } from './notes.service';
 
 @Controller('notes')
@@ -14,11 +16,12 @@ export class NotesController {
     }
 
     @Get()
-    getNotes() {
-        return this.noteService.getNotes();
+    getNotes(@Query(ValidationPipe) filterInfos: GetNotesFilterInfos) {
+        return this.noteService.getNotes(filterInfos);
     }
 
     @Post('create')
+    @UsePipes(ValidationPipe)
     createNote(@Body() body: CreateNotesInfo): Notes {
         return this.noteService.createNote(body);
     }
@@ -29,7 +32,7 @@ export class NotesController {
     }
 
     @Patch(':id')
-    updateNote(@Param('id') id:string, @Body('title') title: string, @Body('description') description: string): Notes{
-       return this.noteService.updateNote(id, title, description);
+    updateNote(@Param('id') id:string, @Body('title') title: string, @Body('status', NotesStatusValidationPipe) status: NotesStatus): Notes{
+       return this.noteService.updateNote(id, title, status);
     }
 }
