@@ -83,3 +83,5 @@ Members: <br>
 Toquero Christy <br>
 Mangmang, Leah<br>
 Ypil, Jeah Marie<br>
+
+*All members of this group contributed to this output however, we only used one Github account.*
