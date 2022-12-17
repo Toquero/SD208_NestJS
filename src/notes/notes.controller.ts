@@ -39,7 +39,7 @@ export class NotesController {
     }
 
     @Patch(':id')
-    updateNote(@Param('id') id:number,@Body('status', NotesStatusValidationPipe) status: NotesStatus){
+    updateNote(@Param('id', ParseIntPipe) id:number,@Body('status', NotesStatusValidationPipe) status: NotesStatus){
        return this.noteService.updateNote(id, status);
     }
 }

@@ -54,12 +54,12 @@ export class NotesService {
     async createNote(note: CreateNotesInfo): Promise<Notes>{
         try {
             const newNotes = this.noteRepository.create({
-                ...this.createNote,
+                ...note,
                 status:NotesStatus.OPEN,
                 createDate:new Date()
             });
             const result = await this.noteRepository.save(newNotes);
-            return result
+            return result;
         } catch (error) {
             //throw error
         }
